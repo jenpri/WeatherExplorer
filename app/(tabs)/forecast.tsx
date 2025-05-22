@@ -2,6 +2,18 @@ import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
+// Función para traducir weathercode a emoji + texto
+function getWeatherDescription(code: number) {
+  if (code === 0) return "☀️ Clear";
+  if (code >= 1 && code <= 3) return "🌤️ Partly Cloudy";
+  if (code >= 45 && code <= 48) return "🌫️ Fog";
+  if (code >= 51 && code <= 67) return "🌦️ Drizzle";
+  if (code >= 71 && code <= 77) return "❄️ Snow";
+  if (code >= 80 && code <= 82) return "🌧️ Rain Showers";
+  if (code >= 95 && code <= 99) return "⛈️ Thunderstorm";
+  return "❓ Unknown";
+}
+
 export default function ForecastScreen() {
   const [forecast, setForecast] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +57,7 @@ export default function ForecastScreen() {
       <Text style={styles.date}>{item.date}</Text>
       <Text>🌡️ Max: {item.max}°C</Text>
       <Text>❄️ Min: {item.min}°C</Text>
-      <Text>🌤️ Code: {item.code}</Text>
+      <Text>{getWeatherDescription(item.code)}</Text>
     </View>
   );
 
@@ -82,3 +94,4 @@ const styles = StyleSheet.create({
   date: { fontWeight: "bold", marginBottom: 5 },
   error: { color: "red", marginTop: 10 },
 });
+
