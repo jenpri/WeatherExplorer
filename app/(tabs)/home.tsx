@@ -44,28 +44,71 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to WeatherExplorer 🌦️</Text>
+      <Text style={styles.title}>🌍 WeatherExplorer</Text>
 
       {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
 
       {loading ? (
-        <ActivityIndicator size="large" color="#00f" />
+        <ActivityIndicator size="large" color="#00BFFF" />
       ) : weather ? (
-        <>
-          <Text style={styles.text}>Temperature: {weather.temperature}°C</Text>
-          <Text style={styles.text}>Windspeed: {weather.windspeed} km/h</Text>
-          <Text style={styles.text}>Time: {weather.time}</Text>
-        </>
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>📍 Your Location</Text>
+          <Text style={styles.text}>🌡️ Temperature: <Text style={styles.bold}>{weather.temperature}°C</Text></Text>
+          <Text style={styles.text}>💨 Wind: <Text style={styles.bold}>{weather.windspeed} km/h</Text></Text>
+          <Text style={styles.text}>🕒 Time: <Text style={styles.bold}>{weather.time}</Text></Text>
+        </View>
       ) : (
-        <Text>No weather data available</Text>
+        <Text style={styles.error}>No data available</Text>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
-  text: { fontSize: 16 },
-  error: { color: "red", fontSize: 16, margin: 10 },
+  container: {
+    flex: 1,
+    backgroundColor: "#e3f2fd", // fondo azul claro
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#0288d1", // azul vibrante
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: 25,
+    borderRadius: 20,
+    width: "90%",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: "#1976d2",
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 18,
+    color: "#333",
+    marginBottom: 8,
+  },
+  bold: {
+    fontWeight: "bold",
+    color: "#000",
+  },
+  error: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 10,
+  },
 });
+

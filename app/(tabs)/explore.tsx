@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { ActivityIndicator, Button, Keyboard, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 export default function ExploreScreen() {
   const [city, setCity] = useState("");
@@ -42,51 +53,94 @@ export default function ExploreScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Search Weather by City 🔍</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.container}
+      >
+        <Text style={styles.title}>🔍 Search Weather by City</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter city name (e.g. Tokyo)"
-        value={city}
-        onChangeText={setCity}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="e.g. Tokyo, Madrid, Lima"
+          value={city}
+          onChangeText={setCity}
+          placeholderTextColor="#999"
+        />
 
-      <Button title="Search" onPress={getWeather} disabled={!city} />
-
-      {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
-      {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
-
-      {weather && (
-        <View style={styles.result}>
-          <Text style={styles.resultText}>📍 {weather.city}</Text>
-          <Text style={styles.resultText}>🌡️ Temp: {weather.temperature}°C</Text>
-          <Text style={styles.resultText}>💨 Wind: {weather.windspeed} km/h</Text>
+        <View style={styles.button}>
+          <Button title="Search" onPress={getWeather} disabled={!city} color="#0288d1" />
         </View>
-      )}
-    </View>
+
+        {loading && <ActivityIndicator size="large" color="#0288d1" style={{ marginTop: 20 }} />}
+        {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
+
+        {weather && (
+          <View style={styles.card}>
+            <Text style={styles.resultText}>📍 {weather.city}</Text>
+            <Text style={styles.resultText}>🌡️ Temp: {weather.temperature}°C</Text>
+            <Text style={styles.resultText}>💨 Wind: {weather.windspeed} km/h</Text>
+            <Text style={styles.resultText}>🕒 Time: {weather.time}</Text>
+          </View>
+        )}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, alignItems: "center", justifyContent: "center" },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 15 },
-  input: {
-    width: "90%",
-    height: 40,
-    borderColor: "#999",
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    borderRadius: 8,
-  },
-  error: { color: "red", marginTop: 10 },
-  result: {
-    marginTop: 30,
-    padding: 20,
-    backgroundColor: "#eee",
-    borderRadius: 10,
+  container: {
+    flex: 1,
+    backgroundColor: "#e3f2fd",
+    justifyContent: "center",
     alignItems: "center",
+    padding: 20,
   },
-  resultText: { fontSize: 16, marginBottom: 5 },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#0288d1",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  input: {
+    width: "100%",
+    height: 45,
+    borderColor: "#90caf9",
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    marginBottom: 15,
+    color: "#333",
+  },
+  button: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: 25,
+    borderRadius: 20,
+    marginTop: 20,
+    alignItems: "center",
+    width: "100%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  resultText: {
+    fontSize: 18,
+    color: "#333",
+    marginBottom: 5,
+  },
+  error: {
+    color: "red",
+    fontSize: 16,
+    marginTop: 10,
+  },
 });
+

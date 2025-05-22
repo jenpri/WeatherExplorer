@@ -2,7 +2,7 @@ import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
-// Función para traducir weathercode a emoji + texto
+// Mapea el código del clima a emojis + descripción
 function getWeatherDescription(code: number) {
   if (code === 0) return "☀️ Clear";
   if (code >= 1 && code <= 3) return "🌤️ Partly Cloudy";
@@ -55,18 +55,18 @@ export default function ForecastScreen() {
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.card}>
       <Text style={styles.date}>{item.date}</Text>
-      <Text>🌡️ Max: {item.max}°C</Text>
-      <Text>❄️ Min: {item.min}°C</Text>
-      <Text>{getWeatherDescription(item.code)}</Text>
+      <Text style={styles.weather}>{getWeatherDescription(item.code)}</Text>
+      <Text style={styles.temp}>🌡️ Max: {item.max}°C</Text>
+      <Text style={styles.temp}>❄️ Min: {item.min}°C</Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>5-Day Forecast 📅</Text>
+      <Text style={styles.title}>📅 5-Day Forecast</Text>
       {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
       {loading ? (
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#0288d1" />
       ) : (
         <FlatList
           data={forecast}
@@ -80,18 +80,52 @@ export default function ForecastScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 40, alignItems: "center" },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
-  list: { paddingBottom: 20 },
-  card: {
-    backgroundColor: "#eee",
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 8,
-    width: 300,
+  container: {
+    flex: 1,
+    backgroundColor: "#e3f2fd",
+    paddingTop: 40,
     alignItems: "center",
+    paddingHorizontal: 10,
   },
-  date: { fontWeight: "bold", marginBottom: 5 },
-  error: { color: "red", marginTop: 10 },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#0288d1",
+    marginBottom: 20,
+  },
+  list: {
+    paddingBottom: 20,
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 12,
+    width: 330,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  date: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 5,
+  },
+  weather: {
+    fontSize: 20,
+    marginBottom: 8,
+  },
+  temp: {
+    fontSize: 16,
+    color: "#444",
+  },
+  error: {
+    color: "red",
+    marginTop: 10,
+  },
 });
 
