@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function ExploreScreen() {
+export default function ForecastScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Search for a city 🔍</Text>
+      <Text>5-Day Forecast 📅</Text>
     </View>
   );
 }
