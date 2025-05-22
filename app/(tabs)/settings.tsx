@@ -22,6 +22,7 @@ export default function SettingsScreen() {
           <Switch
             value={isDarkMode}
             onValueChange={setIsDarkMode}
+            accessibilityLabel="Toggle dark mode setting"
             thumbColor={isDarkMode ? "#f5dd4b" : "#ccc"}
             trackColor={{ false: "#999", true: "#444" }}
           />
@@ -32,6 +33,7 @@ export default function SettingsScreen() {
           <Switch
             value={useCelsius}
             onValueChange={setUseCelsius}
+            accessibilityLabel="Switch between Celsius and Fahrenheit"
             thumbColor={useCelsius ? "#4fc3f7" : "#ccc"}
             trackColor={{ false: "#999", true: "#0288d1" }}
           />
@@ -42,6 +44,7 @@ export default function SettingsScreen() {
           <Switch
             value={notifications}
             onValueChange={setNotifications}
+            accessibilityLabel="Toggle notifications setting"
             thumbColor={notifications ? "#81c784" : "#ccc"}
             trackColor={{ false: "#999", true: "#388e3c" }}
           />
@@ -95,3 +98,4 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
+
