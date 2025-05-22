@@ -1,60 +1,55 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
 
 export default function IndexScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>🌤️ Welcome to</Text>
-      <Text style={styles.logo}>WeatherExplorer</Text>
-
-      <Image
-        source={{
-          uri: "https://cdn-icons-png.flaticon.com/512/869/869869.png",
-        }}
-        style={styles.image}
-      />
-
-      <Text style={styles.subtitle}>Explore the weather with color, clarity and style.</Text>
-      <Text style={styles.footer}>Swipe through the tabs to get started ➡️</Text>
-    </View>
+    <ImageBackground
+      source={{
+        uri: "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=1170&q=80",
+      }}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Welcome! 👋</Text>
+        <Text style={styles.subtitle}>
+          Your weather adventure starts here.
+        </Text>
+        <Text style={styles.quote}>
+          "Sunshine is delicious, rain is refreshing, wind braces us up..." 🌤️
+        </Text>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: "#e3f2fd",
-    alignItems: "center",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     justifyContent: "center",
-    padding: 20,
+    alignItems: "center",
+    padding: 24,
   },
   title: {
-    fontSize: 22,
-    color: "#0288d1",
-    marginBottom: 5,
-  },
-  logo: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "#01579b",
-    marginBottom: 20,
+    color: "#fff",
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 18,
-    color: "#444",
+    color: "#eee",
     textAlign: "center",
-    paddingHorizontal: 10,
-    marginTop: 15,
+    marginBottom: 20,
   },
-  footer: {
-    fontSize: 14,
-    color: "#777",
-    marginTop: 30,
+  quote: {
+    fontSize: 16,
     fontStyle: "italic",
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginTop: 10,
-    borderRadius: 20,
+    color: "#ccc",
+    textAlign: "center",
+    paddingHorizontal: 20,
   },
 });
