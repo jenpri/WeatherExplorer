@@ -1,146 +1,130 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
-  ActivityIndicator,
-  Button,
+  ImageBackground,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
   View,
 } from "react-native";
 
 export default function ExploreScreen() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const getWeather = async () => {
+  const fetchWeather = async () => {
     Keyboard.dismiss();
-    setLoading(true);
+    setErrorMsg("");
     setWeather(null);
-    setErrorMsg(null);
 
-    try {
-      const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
-      const geoData = await geoRes.json();
-
-      if (!geoData.results || geoData.results.length === 0) {
-        setErrorMsg("City not found.");
-        setLoading(false);
-        return;
+    if (city.toLowerCase() === "dublin") {
+      try {
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=53.3498&longitude=-6.2603&current_weather=true&timezone=auto`
+        );
+        const data = await response.json();
+        setWeather(data.current_weather);
+      } catch (error) {
+        setErrorMsg("Failed to fetch weather data.");
       }
-
-      const { latitude, longitude, name, country } = geoData.results[0];
-
-      const weatherRes = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
-      );
-      const weatherData = await weatherRes.json();
-
-      setWeather({
-        city: `${name}, ${country}`,
-        ...weatherData.current_weather,
-      });
-    } catch (err) {
-      setErrorMsg("Error fetching data.");
-    } finally {
-      setLoading(false);
+    } else {
+      setErrorMsg("Only 'Dublin' is currently supported in this version.");
     }
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.container}
-      >
-        <Text style={styles.title}>🔍 Search Weather by City</Text>
+    <ImageBackground
+      source={{
+        uri: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe",
+      }}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Explore the Weather</Text>
 
         <TextInput
+          placeholder="Enter a city (e.g. Dublin)"
+          placeholderTextColor="#ccc"
           style={styles.input}
-          placeholder="e.g. Tokyo, Madrid, Lima"
           value={city}
           onChangeText={setCity}
-          placeholderTextColor="#999"
         />
 
-        <View style={styles.button}>
-          <Button title="Search" onPress={getWeather} disabled={!city} color="#0288d1" />
-        </View>
+        <TouchableOpacity onPress={fetchWeather} style={styles.button}>
+          <Text style={styles.buttonText}>Search</Text>
+        </TouchableOpacity>
 
-        {loading && <ActivityIndicator size="large" color="#0288d1" style={{ marginTop: 20 }} />}
-        {errorMsg && <Text style={styles.error}>{errorMsg}</Text>}
-
-        {weather && (
-          <View style={styles.card}>
-            <Text style={styles.resultText}>📍 {weather.city}</Text>
-            <Text style={styles.resultText}>🌡️ Temp: {weather.temperature}°C</Text>
-            <Text style={styles.resultText}>💨 Wind: {weather.windspeed} km/h</Text>
-            <Text style={styles.resultText}>🕒 Time: {weather.time}</Text>
+        {errorMsg ? (
+          <Text style={styles.error}>{errorMsg}</Text>
+        ) : weather ? (
+          <View style={styles.result}>
+            <Text style={styles.weatherText}>Temperature: {weather.temperature}°C</Text>
+            <Text style={styles.weatherText}>Wind Speed: {weather.windspeed} km/h</Text>
+            <Text style={styles.weatherText}>Weather Code: {weather.weathercode}</Text>
           </View>
-        )}
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+        ) : null}
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: "#e3f2fd",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 24,
     justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
+    color: "#fff",
     fontWeight: "bold",
-    color: "#0288d1",
-    marginBottom: 20,
     textAlign: "center",
+    marginBottom: 20,
   },
   input: {
-    width: "100%",
-    height: 45,
-    borderColor: "#90caf9",
-    borderWidth: 2,
-    borderRadius: 10,
+    backgroundColor: "#ffffffcc",
+    borderRadius: 8,
     paddingHorizontal: 15,
+    paddingVertical: 10,
     fontSize: 16,
-    backgroundColor: "#fff",
-    marginBottom: 15,
-    color: "#333",
+    color: "#000",
+    marginBottom: 10,
   },
   button: {
-    width: "100%",
+    backgroundColor: "#0288d1",
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: "center",
     marginBottom: 20,
   },
-  card: {
-    backgroundColor: "#ffffff",
-    padding: 25,
-    borderRadius: 20,
-    marginTop: 20,
-    alignItems: "center",
-    width: "100%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 6,
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
-  resultText: {
-    fontSize: 18,
-    color: "#333",
+  result: {
+    backgroundColor: "#ffffff33",
+    padding: 15,
+    borderRadius: 10,
+  },
+  weatherText: {
+    fontSize: 16,
+    color: "#fff",
     marginBottom: 5,
   },
   error: {
-    color: "red",
-    fontSize: 16,
+    color: "#ffdddd",
+    fontSize: 14,
+    textAlign: "center",
     marginTop: 10,
   },
 });
+
 

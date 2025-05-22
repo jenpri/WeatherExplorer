@@ -1,79 +1,94 @@
-import { ScrollView, StyleSheet, Text } from "react-native";
+import * as Location from "expo-location";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [weather, setWeather] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setLoading(false);
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+      setLocation(loc);
+
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${loc.coords.latitude}&longitude=${loc.coords.longitude}&current_weather=true`
+      );
+      const data = await response.json();
+      setWeather(data.current_weather);
+      setLoading(false);
+    })();
+  }, []);
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.giantEmoji}>⛅🌈🌧️☀️</Text>
+    <ImageBackground
+      source={{ uri: "https://images.unsplash.com/photo-1502082553048-f009c37129b9" }}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Welcome to WeatherExplorer ☁️</Text>
 
-      <Text style={styles.title}>Welcome to WeatherExplorer!</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#fff" />
+        ) : weather ? (
+          <>
+            <Text style={styles.info}>
+              📍 Your location: {location?.coords.latitude.toFixed(2)}, {location?.coords.longitude.toFixed(2)}
+            </Text>
+            <Text style={styles.info}>🌡️ Temperature: {weather.temperature}°C</Text>
+            <Text style={styles.info}>💨 Wind speed: {weather.windspeed} km/h</Text>
+          </>
+        ) : (
+          <Text style={styles.info}>Could not load weather data.</Text>
+        )}
 
-      <Text style={styles.subtitle}>
-        Get the weather you need with a splash of color and fun! 🎨💧
-      </Text>
-
-      <Text style={styles.section}>
-        🌍 Location-based forecast  
-        📅 Daily & weekly info  
-        ⚡ Real-time updates  
-        🔔 Alerts and tips
-      </Text>
-
-      <Text style={styles.quote}>
-        "No matter the weather, always bring your own sunshine." ☀️
-      </Text>
-
-      <Text style={styles.footer}>Let’s explore the sky together! 🚀🌤️</Text>
-    </ScrollView>
+        <Text style={styles.motivation}>
+          "No matter the weather, always bring your own sunshine." ☀️
+        </Text>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: "#fcefe3",
-    alignItems: "center",
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
     justifyContent: "center",
+    alignItems: "center",
     padding: 24,
   },
-  giantEmoji: {
-    fontSize: 48,
-    marginBottom: 10,
-  },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#e65100",
+    color: "#fff",
+    marginBottom: 30,
     textAlign: "center",
-    marginBottom: 10,
   },
-  subtitle: {
+  info: {
     fontSize: 18,
-    color: "#4e342e",
+    color: "#eee",
+    marginBottom: 10,
     textAlign: "center",
-    marginBottom: 20,
   },
-  section: {
-    fontSize: 16,
-    color: "#5d4037",
-    textAlign: "center",
-    marginBottom: 20,
-    lineHeight: 26,
-  },
-  quote: {
+  motivation: {
     fontSize: 16,
     fontStyle: "italic",
-    color: "#3e2723",
+    color: "#fdd835",
     textAlign: "center",
-    backgroundColor: "#fff8e1",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  footer: {
-    fontSize: 16,
     marginTop: 30,
-    color: "#6d4c41",
-    textAlign: "center",
+    paddingHorizontal: 20,
   },
 });
 
