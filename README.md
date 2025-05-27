@@ -1,5 +1,16 @@
 # Welcome to your Expo app 👋
 
+# Gotcha Group 
+ Team Members 
+
+Jenny Priscila Matarrita Zuniga (2023104)   – Lead Programmer 
+
+Kah Chung Wong (2023005)– UI/UX Design 
+
+Abhinav Borgohain (2023287) – Testing 
+
+Mary Karanja (2023331) – Documentation 
+
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
