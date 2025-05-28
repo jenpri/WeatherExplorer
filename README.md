@@ -11,6 +11,62 @@ Abhinav Borgohain (2023287) – Testing
 
 Mary Karanja (2023331) – Documentation 
 
+#  WeatherExplorer
+
+**WeatherExplorer** is a cross-platform mobile application built with **React Native** and **Expo**.  
+It allows users to search for weather forecasts by city or based on their current location, view a 5-day forecast, and enjoy a clean, nature-inspired UI with theme support and accessibility.
+
+---
+
+## Features
+
+-  View weather based on your current location
+-  Search weather by city name
+-  See a 5-day forecast with min/max temperature
+-  Temperature displayed in Celsius (switch included)
+-  Light/Dark mode (toggle interface ready)
+-  Notification toggle (UI present, logic optional)
+-  Basic accessibility (`accessibilityLabel` on toggles)
+-  Visually enhanced with professional background images
+
+---
+
+##  Screenshots
+
+###  Home Screen
+![Home Screen](./assets/screenshots/home.png)
+
+###  Forecast Screen
+![Forecast Screen](./assets/screenshots/forecast.png)
+
+###  Explore Screen
+![Explore Screen](./assets/screenshots/explore.png)
+
+###  Settings Screen
+![Settings Screen](./assets/screenshots/settings.png)
+
+
+---
+
+##  Technologies Used
+
+- React Native
+- Expo
+- Open-Meteo API
+- Expo Location
+- React Navigation
+- Expo Router
+
+---
+
+##  Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/jenpri/WeatherExplorer.git
+cd WeatherExplorer
+
 ------------------------------------------------------------------------------------------------------------------------
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
